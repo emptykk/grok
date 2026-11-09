@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>演示门禁</title>
+  <style>
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #070b14; color: #e5e7eb; font-family: "PingFang SC", "Microsoft YaHei", sans-serif; }
+    form { width: min(420px, 92vw); padding: 28px; border-radius: 16px; background: rgba(15,23,42,.86); border: 1px solid rgba(148,163,184,.25); }
+    h1 { font-size: 20px; margin: 0 0 8px; }
+    p { color: #94a3b8; font-size: 13px; line-height: 1.6; }
+    input, button { width: 100%; box-sizing: border-box; margin-top: 10px; padding: 12px; border-radius: 10px; border: 1px solid #334155; background: #0f172a; color: #e5e7eb; }
+    button { background: #0d9488; border: 0; font-weight: 700; cursor: pointer; }
+    .err { color: #fca5a5; min-height: 1.2em; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <form id="gate">
+    <h1>演示门禁</h1>
+    <p>这是公网演示环境。请输入部署时配置的门禁口令，通过后才能进入系统。</p>
+    <input id="secret" type="password" autocomplete="off" placeholder="门禁口令" required />
+    <button type="submit">进入</button>
+    <div class="err" id="err"></div>
+  </form>
+  <script>
+    document.getElementById('gate').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const err = document.getElementById('err');
+      err.textContent = '';
+      const secret = document.getElementById('secret').value;
+      const resp = await fetch('/api/auth/gate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ secret })
+      });
+      if (resp.ok) location.href = '/';
+      else err.textContent = '门禁未通过';
+    });
+  </script>
+</body>
+</html>

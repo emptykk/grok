@@ -1,0 +1,36 @@
+# Render Free web service. Secrets are declared only by name; set them in the dashboard.
+services:
+  - type: web
+    name: intelligent-procurement
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    envVars:
+      - key: PUBLIC_MODE
+        value: "true"
+      - key: SPRING_PROFILES_ACTIVE
+        value: h2
+      - key: H2_CONSOLE_ENABLED
+        value: "false"
+      - key: SPRINGDOC_ENABLED
+        value: "false"
+      - key: KNIFE4J_ENABLE
+        value: "false"
+      - key: H2_FILE
+        value: /tmp/procurement
+      - key: H2_EXTRA
+        value: DB_CLOSE_ON_EXIT=FALSE
+      - key: UPLOAD_DIR
+        value: /tmp/uploads
+      - key: TOMCAT_MAX_THREADS
+        value: "20"
+      - key: DB_POOL_SIZE
+        value: "3"
+      - key: DEMO_GATE_SECRET
+        sync: false
+      - key: DEMO_PASSWORD
+        sync: false
+      - key: JWT_SECRET
+        sync: false

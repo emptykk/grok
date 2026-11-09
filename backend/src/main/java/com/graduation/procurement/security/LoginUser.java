@@ -1,0 +1,36 @@
+package com.graduation.procurement.security;
+
+import com.graduation.procurement.entity.SysUser;
+import lombok.Getter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Getter
+public class LoginUser implements UserDetails {
+    private final SysUser user;
+    private final List<String> roles;
+
+    public LoginUser(SysUser user, List<String> roles) {
+        this.user = user;
+        this.roles = roles;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles.stream().map(r -> new SimpleGrantedAuthority("ROLE_" + r)).collect(Collectors.toList());
+    }
+
+    @Override public String getPassword() { return user.getPasswordHash(); }
+    @Override public String getUsername() { return user.getUsername(); }
+    @Override public boolean isAccountNonExpired() { return true; }
+    @Override public boolean isAccountNonLocked() { return user.getStatus() != null && user.getStatus() == 1; }
+    @Override public boolean isCredentialsNonExpired() { return true; }
+    @Override public boolean isEnabled() { return user.getStatus() != null && user.getStatus() == 1; }
+
+    public Long getId() { return user.getId(); }
+}

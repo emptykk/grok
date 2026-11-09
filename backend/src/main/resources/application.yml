@@ -1,0 +1,68 @@
+server:
+  port: ${PORT:8080}
+  forward-headers-strategy: framework
+  servlet:
+    context-path: /
+  tomcat:
+    threads:
+      max: ${TOMCAT_MAX_THREADS:40}
+      min-spare: ${TOMCAT_MIN_SPARE:2}
+    accept-count: 20
+    max-connections: ${TOMCAT_MAX_CONNECTIONS:100}
+
+spring:
+  application:
+    name: intelligent-procurement
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:h2}
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 25MB
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+  task:
+    scheduling:
+      pool:
+        size: 2
+  datasource:
+    hikari:
+      maximum-pool-size: ${DB_POOL_SIZE:5}
+      minimum-idle: 1
+      connection-timeout: 10000
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: auto
+
+procurement:
+  upload-dir: ${UPLOAD_DIR:${user.dir}/uploads}
+  jwt-secret: ${JWT_SECRET:IntelligentProcurementGraduationProjectSecretKey2026VeryLong}
+  jwt-expire-hours: 24
+  public-mode: ${PUBLIC_MODE:false}
+  demo-gate-secret: ${DEMO_GATE_SECRET:}
+  demo-password: ${DEMO_PASSWORD:}
+
+deepseek:
+  api-key: ${DEEPSEEK_API_KEY:}
+  base-url: https://api.deepseek.com
+  model: deepseek-chat
+  timeout-seconds: 60
+
+springdoc:
+  api-docs:
+    enabled: ${SPRINGDOC_ENABLED:true}
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: ${SPRINGDOC_ENABLED:true}
+    path: /swagger-ui.html
+
+knife4j:
+  enable: ${KNIFE4J_ENABLE:true}
+  setting:
+    language: zh_cn
